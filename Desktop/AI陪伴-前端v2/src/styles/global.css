@@ -1,0 +1,869 @@
+/* ========== 黑白灰铅笔手绘风 · 主界面 ========== */
+/* 防疲劳：只用黑白灰时靠层次（多级灰）、留白、手绘边框变化、hover 反馈和列表交替样式区分，避免单调 */
+:root {
+  --sketch-black: #1a1a1a;
+  --sketch-gray: #4a4a4a;
+  --sketch-light: #e8e6e3;
+  --sketch-white: #faf9f7;
+  --sketch-paper: #f5f3f0;
+  --sketch-border: #2d2d2d;
+  --sketch-mid: #6b6b6b;
+  --sketch-soft: #d4d2cf;
+  --font-hand: 'Caveat', 'ZCOOL KuaiLe', cursive;
+  --font-ui: 'ZCOOL KuaiLe', 'Caveat', sans-serif;
+  /* 字体切换：由 .font-hand / .font-simple / .font-serif 覆盖 */
+  /* 我们的世界：黑白灰层次（不同灰度的卡片区分） */
+  --dream-light: #ebeae7;
+  --dream-mid: #e0ded9;
+  --dream-dark: #3d3d3d;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  font-family: var(--font-ui);
+  background: var(--sketch-paper);
+  color: var(--sketch-black);
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+/* 手绘感背景 */
+.sketch-bg {
+  background-color: var(--sketch-paper);
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.015) 2px,
+      rgba(0,0,0,0.015) 4px
+    );
+}
+
+/* 手绘边框：不规则描边效果 */
+.sketch-border {
+  border: 2px solid var(--sketch-border);
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+  box-shadow:
+    1px 1px 0 var(--sketch-border),
+    -1px -1px 0 var(--sketch-light);
+}
+
+.sketch-card {
+  background: var(--sketch-white);
+  border: 2px solid var(--sketch-black);
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+  box-shadow: 3px 3px 0 var(--sketch-gray);
+}
+
+/* 手写感标题 */
+.sketch-title {
+  font-family: var(--font-hand);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+/* 按钮手绘风 */
+.sketch-btn {
+  font-family: var(--font-hand);
+  font-weight: 600;
+  background: var(--sketch-white);
+  color: var(--sketch-black);
+  border: 2px solid var(--sketch-black);
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+  padding: 0.5em 1em;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 2px 2px 0 var(--sketch-gray);
+}
+.sketch-btn:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 var(--sketch-gray);
+}
+.sketch-btn:active {
+  transform: translate(1px, 1px);
+  box-shadow: 0 0 0 var(--sketch-gray);
+}
+
+/* 防疲劳：主操作按钮略深，hover 时轻微反白 */
+.sketch-btn.primary {
+  border-color: var(--sketch-black);
+  background: var(--sketch-soft);
+}
+.sketch-btn.primary:hover {
+  background: var(--sketch-light);
+}
+
+/* 输入框手绘风 */
+.sketch-input {
+  font-family: var(--font-ui);
+  background: var(--sketch-white);
+  border: 2px solid var(--sketch-black);
+  border-radius: 15px 255px 15px 225px/225px 15px 255px 15px;
+  padding: 0.6em 0.9em;
+  color: var(--sketch-black);
+  width: 100%;
+}
+.sketch-input::placeholder {
+  color: var(--sketch-gray);
+  opacity: 0.8;
+}
+
+/* 顶部导航通用 */
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  padding-top: max(1rem, env(safe-area-inset-top));
+  background: var(--sketch-white);
+  border-bottom: 2px solid var(--sketch-black);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.page-header .back {
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-size: 1.25rem;
+  color: var(--sketch-black);
+}
+.page-header .title {
+  font-family: var(--font-hand);
+  font-weight: 700;
+  font-size: 1.5rem;
+}
+.page-header .right {
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ========== 我们的世界 · 黑白灰层次 ========== */
+.dream-bg {
+  background: var(--sketch-paper);
+  min-height: 100vh;
+}
+
+.dream-card {
+  background: var(--sketch-white);
+  border: 2px solid var(--sketch-border);
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+  padding: 1.25rem;
+  box-shadow: 2px 2px 0 var(--sketch-soft);
+}
+
+.dream-card--mint { background: var(--sketch-white); border-color: var(--sketch-soft); }
+.dream-card--peach { background: var(--dream-mid); border-color: var(--sketch-border); }
+.dream-card--lavender { background: var(--sketch-white); border-color: var(--sketch-gray); }
+.dream-card--sky { background: var(--dream-light); border-color: var(--sketch-soft); }
+
+.dream-title {
+  font-family: var(--font-hand);
+  color: var(--sketch-black);
+  font-weight: 600;
+}
+
+/* ========== 我们的世界 · 治愈浅色（仅 3 色） ========== */
+.world-healing {
+  --world-1: #faf8f5;
+  --world-2: #e8f0ec;
+  --world-3: #f5efe8;
+  --world-text: #5c5c5c;
+  --world-text-soft: #8a8a8a;
+  --world-line: rgba(0, 0, 0, 0.06);
+}
+.world-healing.dream-bg {
+  background: var(--world-1);
+  min-height: 100vh;
+}
+.world-healing .dream-header {
+  background: #fff;
+  border-bottom: 1px solid var(--world-line);
+}
+.world-healing .dream-header .title,
+.world-healing .dream-header .back {
+  color: var(--world-text);
+}
+.world-healing .dream-card {
+  background: #fff;
+  border: 1px solid var(--world-line);
+  border-radius: 16px;
+  box-shadow: none;
+}
+.world-healing .dream-card--mint { background: var(--world-2); }
+.world-healing .dream-card--peach { background: var(--world-3); }
+.world-healing .dream-card--lavender { background: #fff; }
+.world-healing .dream-card--sky { background: var(--world-2); }
+.world-healing .dream-card-title,
+.world-healing .dream-title { color: var(--world-text); }
+.world-healing .dream-date,
+.world-healing .dream-content,
+.world-healing .intro,
+.world-healing .empty-dream { color: var(--world-text-soft); }
+
+/* 弹层：圆角插画卡片 */
+.world-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.2);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+.world-modal-card {
+  background: #fff;
+  border-radius: 20px;
+  max-width: 420px;
+  width: 100%;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--world-line);
+}
+.world-modal-illustration-wrap {
+  position: relative;
+  width: 100%;
+  height: 280px;
+  min-height: 280px;
+  flex-shrink: 0;
+}
+.world-modal-carousel {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.world-modal-carousel::-webkit-scrollbar {
+  display: none;
+}
+.world-modal-carousel-slide {
+  flex: 0 0 100%;
+  width: 100%;
+  min-width: 100%;
+  height: 100%;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  position: relative;
+}
+.world-modal-carousel-slide .world-modal-illustration,
+.world-modal-carousel-slide .world-modal-illustration-placeholder {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+.world-modal-carousel-slide .world-modal-illustration-placeholder {
+  background: linear-gradient(135deg, var(--world-2) 0%, var(--world-3) 100%);
+}
+.world-modal-carousel-dots {
+  position: absolute;
+  bottom: 0.5rem;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 0.35rem;
+  z-index: 2;
+  pointer-events: none;
+}
+.world-modal-carousel-dots .world-modal-dot {
+  pointer-events: auto;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  border: none;
+  padding: 0;
+  background: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.world-modal-carousel-dots .world-modal-dot.active {
+  background: rgba(255, 255, 255, 0.95);
+}
+.world-modal-image-actions {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  z-index: 2;
+}
+.world-modal-action-link {
+  min-width: 2rem;
+  height: 2rem;
+  padding: 0 0.5rem;
+  border: none;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--world-text-soft);
+  font-family: var(--font-ui);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.world-modal-action-link:hover {
+  background: rgba(255, 255, 255, 0.95);
+}
+.world-modal-action-sep {
+  display: none;
+}
+.world-upload-input {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* 删除二次确认弹窗 */
+.world-delete-confirm-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+.world-delete-confirm-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.25rem;
+  max-width: 260px;
+  width: 100%;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  border: 1px solid var(--world-line);
+}
+.world-delete-confirm-text {
+  margin: 0 0 1rem;
+  font-size: 0.9rem;
+  color: var(--world-text);
+  text-align: center;
+}
+.world-delete-confirm-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+}
+.world-delete-confirm-btn {
+  min-width: 4rem;
+  padding: 0.4rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-family: var(--font-ui);
+  cursor: pointer;
+  border: 1px solid var(--world-line);
+  background: #fff;
+  color: var(--world-text);
+}
+.world-delete-confirm-btn.confirm {
+  background: var(--world-text);
+  color: #fff;
+  border-color: var(--world-text);
+}
+.world-delete-confirm-btn:hover {
+  opacity: 0.9;
+}
+
+/* 添加回忆 · 底部滑出表单（Teleport 到 body 的根容器） */
+.add-form-root {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  pointer-events: none;
+}
+.add-form-root .add-form-backdrop {
+  pointer-events: auto;
+}
+.add-form-root .add-form-sheet {
+  pointer-events: auto;
+}
+.add-form-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  transition: opacity 0.25s ease;
+}
+.add-form-sheet {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  max-height: 85vh;
+  background: var(--world-1);
+  border-radius: 20px 20px 0 0;
+  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  animation: add-form-slide-up 0.3s cubic-bezier(0.32, 0.72, 0, 1) forwards;
+}
+@keyframes add-form-slide-up {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+.add-form-handle {
+  width: 2.5rem;
+  height: 4px;
+  margin: 0.6rem auto 0;
+  background: var(--world-text-soft);
+  border-radius: 2px;
+  opacity: 0.4;
+}
+.add-form-inner {
+  padding: 1rem 1.25rem 1.5rem;
+  padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+  overflow-y: auto;
+}
+.add-form-title {
+  font-family: var(--font-hand);
+  font-size: 1.25rem;
+  margin-bottom: 1.25rem;
+  color: var(--world-text);
+  text-align: center;
+}
+.add-form-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.add-form-field label {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--world-text-soft);
+  margin-bottom: 0.35rem;
+}
+.add-form-input {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--world-line);
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-family: var(--font-ui);
+  color: var(--world-text);
+  background: #fff;
+}
+.add-form-input::placeholder {
+  color: var(--world-text-soft);
+  opacity: 0.8;
+}
+.add-form-textarea {
+  resize: vertical;
+  min-height: 4.5em;
+}
+.add-form-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+.add-form-btn {
+  flex: 1;
+  padding: 0.65rem 1rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-family: var(--font-ui);
+  cursor: pointer;
+  transition: opacity 0.2s, background 0.2s;
+}
+.add-form-btn.cancel {
+  border: 1px solid var(--world-line);
+  background: #fff;
+  color: var(--world-text-soft);
+}
+.add-form-btn.submit {
+  border: none;
+  background: var(--world-text);
+  color: #fff;
+}
+.add-form-btn:hover {
+  opacity: 0.9;
+}
+
+.world-modal-illustration {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  background: var(--world-2);
+  display: block;
+}
+.world-modal-source-overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 0.75rem 1rem;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.5) 60%, transparent);
+  color: #fff;
+  max-height: 55%;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.world-modal-source-overlay .world-modal-source-label {
+  font-size: 0.75rem;
+  opacity: 0.9;
+  margin-bottom: 0.4rem;
+  color: rgba(255, 255, 255, 0.95);
+}
+.world-modal-source-overlay .world-modal-source-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.world-modal-source-overlay .world-source-msg {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.95);
+}
+.world-modal-source-overlay .world-source-role {
+  flex-shrink: 0;
+  opacity: 0.85;
+  min-width: 1.5em;
+}
+.world-modal-source-overlay .world-source-text {
+  word-break: break-word;
+}
+.world-modal-source-overlay .world-source-msg.ai .world-source-text {
+  opacity: 0.9;
+}
+.world-modal-body {
+  padding: 1.25rem;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.world-modal-body-content {
+  flex-shrink: 0;
+}
+.world-modal-comments {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--world-line);
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.world-comment-item {
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+.world-comment-item .comment-user-row {
+  margin-bottom: 0.35rem;
+}
+.world-comment-item .comment-user-label {
+  font-size: 0.8rem;
+  color: var(--world-text-soft);
+  margin-right: 0.35rem;
+}
+.world-comment-item .comment-user-text {
+  color: var(--world-text);
+  word-break: break-word;
+}
+/* 小灵魂：等待中 · 若有似无 */
+.world-comment-item .soul-typing {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0 0 0.5rem;
+  min-height: 1.5rem;
+}
+.world-comment-item .soul-typing .soul-label {
+  font-size: 0.7rem;
+  color: var(--world-text-soft);
+  opacity: 0.5;
+  flex-shrink: 0;
+}
+.world-comment-item .soul-dots {
+  display: inline-flex;
+  gap: 0.15rem;
+  align-items: center;
+}
+.world-comment-item .soul-dots span {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--world-text-soft);
+  opacity: 0.5;
+  animation: soul-dot 2s ease-in-out infinite;
+}
+.world-comment-item .soul-dots span:nth-child(2) { animation-delay: 0.25s; }
+.world-comment-item .soul-dots span:nth-child(3) { animation-delay: 0.5s; }
+@keyframes soul-dot {
+  0%, 100% { opacity: 0.25; }
+  50% { opacity: 0.6; }
+}
+/* 小灵魂：回复 · 幽微浮现 */
+.world-comment-item .soul-reply {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.35rem 0 0 0.5rem;
+  border-left: 1px solid rgba(0, 0, 0, 0.06);
+  animation: soul-reply-in 0.8s ease-out;
+}
+.world-comment-item .soul-reply .soul-label {
+  font-size: 0.65rem;
+  color: var(--world-text-soft);
+  opacity: 0.45;
+  letter-spacing: 0.08em;
+  flex-shrink: 0;
+}
+.world-comment-item .soul-reply .soul-text {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--world-text-soft);
+  opacity: 0.85;
+  line-height: 1.5;
+  font-style: italic;
+  word-break: break-word;
+  font-weight: 400;
+}
+@keyframes soul-reply-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.world-modal-input-wrap {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--world-line);
+  flex-shrink: 0;
+}
+.world-modal-input-wrap .sketch-input {
+  flex: 1;
+  border-radius: 12px;
+  border: 1px solid var(--world-line);
+}
+.world-modal-input-wrap .sketch-btn {
+  border-radius: 12px;
+  border: 1px solid var(--world-line);
+  flex-shrink: 0;
+}
+
+
+/* 安全区 */
+.safe-bottom {
+  padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+}
+
+/* ========== 字体切换（class 在 html 上，全局生效） ========== */
+html.font-hand {
+  --font-hand: 'Caveat', 'ZCOOL KuaiLe', cursive;
+  --font-ui: 'ZCOOL KuaiLe', 'Caveat', sans-serif;
+}
+html.font-simple {
+  --font-hand: 'Noto Sans SC', sans-serif;
+  --font-ui: 'Noto Sans SC', sans-serif;
+}
+html.font-serif {
+  --font-hand: 'Noto Serif SC', serif;
+  --font-ui: 'Noto Serif SC', serif;
+}
+
+/* 防疲劳：列表隔行/卡片交替感（可选，用 grey 层次） */
+.card-soft {
+  border-color: var(--sketch-soft);
+  box-shadow: 2px 2px 0 var(--sketch-soft);
+}
+.card-soft:hover {
+  border-color: var(--sketch-border);
+  box-shadow: 3px 3px 0 var(--sketch-gray);
+}
+
+/* ========== 简洁模式：简洁温柔干净风格（参考极简线稿） ========== */
+/* 纯黑白 + 浅灰底、细线、大量留白、无重描边与阴影 */
+.simple-mode.sketch-bg,
+.simple-mode .sketch-bg {
+  background-color: #f8f8f6;
+  background-image: none;
+}
+
+.simple-mode .sketch-border {
+  border: 1px solid var(--sketch-border);
+  border-radius: 8px;
+  box-shadow: none;
+}
+
+.simple-mode .sketch-card {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  box-shadow: none;
+  background: #fff;
+}
+
+.simple-mode .sketch-title {
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+.simple-mode .sketch-btn {
+  border: 1px solid var(--sketch-border);
+  border-radius: 8px;
+  box-shadow: none;
+  font-weight: 500;
+}
+.simple-mode .sketch-btn:hover {
+  transform: none;
+  background: var(--sketch-soft);
+  box-shadow: none;
+}
+.simple-mode .sketch-btn:active {
+  transform: none;
+  box-shadow: none;
+}
+.simple-mode .sketch-btn.primary {
+  background: var(--sketch-soft);
+  border-color: var(--sketch-border);
+}
+.simple-mode .sketch-btn.primary:hover {
+  background: var(--sketch-light);
+}
+
+.simple-mode .sketch-input {
+  border: 1px solid var(--sketch-border);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.simple-mode .page-header {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  background: #fff;
+}
+
+.simple-mode .dream-bg {
+  background: #f8f8f6;
+}
+
+.simple-mode .dream-card {
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 12px;
+  box-shadow: none;
+  background: #fff;
+}
+.simple-mode .dream-card--peach {
+  background: var(--sketch-soft);
+  border-color: rgba(0, 0, 0, 0.06);
+}
+.simple-mode .dream-card--sky {
+  background: #fff;
+  border-color: rgba(0, 0, 0, 0.06);
+}
+.simple-mode .dream-card--lavender {
+  background: #fff;
+  border-color: rgba(0, 0, 0, 0.08);
+}
+/* 我们的世界页面在简洁模式下仍使用治愈浅色 */
+.simple-mode .world-healing.dream-bg {
+  background: var(--world-1);
+}
+.simple-mode .world-healing .dream-card {
+  background: #fff;
+  border: 1px solid var(--world-line);
+  border-radius: 16px;
+}
+.simple-mode .world-healing .dream-card--mint,
+.simple-mode .world-healing .dream-card--sky { background: var(--world-2); }
+.simple-mode .world-healing .dream-card--peach { background: var(--world-3); }
+.simple-mode .world-healing .dream-card--lavender { background: #fff; }
+
+.simple-mode .card-soft {
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: none;
+  background: #fff;
+}
+.simple-mode .card-soft:hover {
+  border-color: rgba(0, 0, 0, 0.1);
+  box-shadow: none;
+}
+
+.simple-mode .bottom-nav {
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  background: #fff;
+}
+
+/* 简洁模式：略增加留白，更透气 */
+.simple-mode .list-wrap {
+  padding: 1.25rem;
+}
+.simple-mode .main {
+  padding: 1.5rem 1.25rem;
+}
+.simple-mode .chat-item,
+.simple-mode .block {
+  margin-bottom: 1rem;
+}
+.simple-mode .block-title {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+.simple-mode .world-entry {
+  background: var(--sketch-soft);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 8px;
+}
+.simple-mode .tag {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+}
+.simple-mode .input-bar {
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+.simple-mode .bubble-inner {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+}
+.simple-mode .upload-zone {
+  border-radius: 12px;
+  border: 1px dashed rgba(0, 0, 0, 0.15);
+}
+.simple-mode .tabs {
+  border-radius: 8px;
+  padding: 3px;
+  border: 1px solid var(--sketch-border);
+}
+.simple-mode .toggle .slider {
+  border: 1px solid var(--sketch-border);
+  border-radius: 1.25rem;
+}
