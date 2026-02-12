@@ -60,6 +60,42 @@
                 <label for="ourworld-add-content">内容</label>
                 <textarea id="ourworld-add-content" v-model="addForm.content" class="add-form-input add-form-textarea" placeholder="写下那一刻的故事…" rows="4" required />
               </div>
+              <!-- 插画图片：多张上传 -->
+              <div class="add-form-field">
+                <label>插画图片</label>
+                <div class="add-form-images-wrap">
+                  <div v-for="(url, idx) in addForm.images" :key="idx" class="add-form-image-item">
+                    <img :src="url" alt="" class="add-form-image-thumb" />
+                    <button type="button" class="add-form-image-remove" aria-label="删除" @click="removeAddFormImage(idx)">×</button>
+                  </div>
+                  <template v-if="addForm.images.length < MAX_ADD_FORM_IMAGES">
+                    <input
+                      ref="addFormImageInputEl"
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      class="add-form-image-input"
+                      @change="onAddFormImageChange"
+                    >
+                    <button type="button" class="add-form-image-add" @click="addFormImageInputEl?.click()">＋ 添加图片</button>
+                  </template>
+                </div>
+              </div>
+              <!-- 来源对话 -->
+              <div class="add-form-field">
+                <label>来源对话</label>
+                <div class="add-form-source-list">
+                  <div v-for="(msg, idx) in addForm.source" :key="idx" class="add-form-source-row">
+                    <select v-model="msg.role" class="add-form-source-role" aria-label="角色">
+                      <option value="user">我</option>
+                      <option value="ai">TA</option>
+                    </select>
+                    <input v-model="msg.text" type="text" class="add-form-input add-form-source-text" placeholder="对话内容" />
+                    <button type="button" class="add-form-source-remove" aria-label="删除" @click="removeAddFormSource(idx)">×</button>
+                  </div>
+                  <button type="button" class="add-form-source-add" @click="addAddFormSource">＋ 添加一条对话</button>
+                </div>
+              </div>
               <div class="add-form-actions">
                 <button type="button" class="add-form-btn cancel" @click="closeAddForm">取消</button>
                 <button type="submit" class="add-form-btn submit">保存</button>
@@ -234,7 +270,11 @@ const addForm = ref({
   date: '',
   title: '',
   content: '',
+  images: [],       // 多张插画 data URL
+  source: [],       // 来源对话 { role: 'user'|'ai', text: string }
 })
+const addFormImageInputEl = ref(null)
+const MAX_ADD_FORM_IMAGES = 9
 const selectedMemory = ref(null)
 const commentInput = ref('')
 const cardComments = ref([])
@@ -301,23 +341,58 @@ function openAddForm() {
 }
 function closeAddForm() {
   showAddForm.value = false
-  addForm.value = { date: addForm.value.date, title: '', content: '' }
+  const keepDate = addForm.value.date
+  addForm.value = { date: keepDate, title: '', content: '', images: [], source: [] }
+}
+
+function onAddFormImageChange(e) {
+  const files = e.target.files
+  if (!files?.length) return
+  const current = addForm.value.images
+  const left = MAX_ADD_FORM_IMAGES - current.length
+  if (left <= 0) return
+  const toAdd = Array.from(files).slice(0, left)
+  toAdd.forEach((file) => {
+    const reader = new FileReader()
+    reader.onload = () => {
+      addForm.value = { ...addForm.value, images: [...addForm.value.images, reader.result] }
+    }
+    reader.readAsDataURL(file)
+  })
+  e.target.value = ''
+}
+function removeAddFormImage(idx) {
+  const arr = addForm.value.images.filter((_, i) => i !== idx)
+  addForm.value = { ...addForm.value, images: arr }
+}
+function addAddFormSource() {
+  addForm.value = { ...addForm.value, source: [...addForm.value.source, { role: 'user', text: '' }] }
+}
+function removeAddFormSource(idx) {
+  const arr = addForm.value.source.filter((_, i) => i !== idx)
+  addForm.value = { ...addForm.value, source: arr }
 }
 
 function submitAddMemory() {
-  const { date, title, content } = addForm.value
+  const { date, title, content, images, source } = addForm.value
   if (!title?.trim() || !content?.trim()) return
   const cid = id.value
+  const sourceList = (source || [])
+    .filter((m) => m?.text?.trim())
+    .map((m) => ({ role: m.role === 'ai' ? 'ai' : 'user', text: m.text.trim() }))
   const newMemory = {
     id: 'user-' + Date.now(),
     date: date || new Date().toISOString().slice(0, 10),
     title: title.trim(),
     content: content.trim(),
     mood: MOODS[Math.floor(Math.random() * MOODS.length)],
-    source: [],
+    source: sourceList,
   }
   const list = userMemories.value[cid] || []
   userMemories.value = { ...userMemories.value, [cid]: [newMemory, ...list] }
+  if (images?.length) {
+    memoryUploads.value = { ...memoryUploads.value, [newMemory.id]: [...images] }
+  }
   lastAddedMemoryId.value = newMemory.id
   closeAddForm()
   setTimeout(() => { lastAddedMemoryId.value = null }, 2000)

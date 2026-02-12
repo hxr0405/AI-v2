@@ -33,7 +33,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { chatMessages } from '../data/mock'
 import { characterProfiles } from '../data/mock'
@@ -45,11 +45,29 @@ const charName = ref('')
 const messages = ref([])
 const inputText = ref('')
 
+function applyPrefill() {
+  const prefill = route.query.prefill
+  if (typeof prefill === 'string') {
+    try {
+      inputText.value = decodeURIComponent(prefill)
+    } catch {
+      inputText.value = prefill
+    }
+    // 去掉 query，避免刷新后再次预填
+    router.replace({ name: 'ChatDetail', params: { id: id.value } })
+  }
+}
+
 onMounted(() => {
   const list = chatMessages[id.value]
   messages.value = list ? [...list] : []
   const profile = characterProfiles[id.value]
   charName.value = profile?.name || '角色'
+  applyPrefill()
+})
+
+watch(() => route.query.prefill, () => {
+  if (route.name === 'ChatDetail' && route.query.prefill) applyPrefill()
 })
 
 function goBack() {

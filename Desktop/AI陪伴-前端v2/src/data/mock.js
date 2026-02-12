@@ -32,6 +32,62 @@ export const characterProfiles = {
       description: '从聊天里能感觉到你们会分享日常小事，也会在对方低落时给予安慰，关系稳定而温暖。',
     },
     memoryCount: 5,
+    // 表层人设（AI 可从聊天抽取，此处为假数据）
+    persona: {
+      nickname: '熬夜陪聊小太阳',
+      tags: ['温柔嘴硬王者', '细节控治愈者', '嘴笨但真诚'],
+      tone: '软 + 一点点毒舌',
+      catchphrase: '没事，我都在',
+      contrastWithYou: '碎碎念、主动关心、秒回消息',
+      contrastWithOthers: '高冷、话少、不爱搭理人',
+    },
+    behavior: {
+      schedule: '熬夜党（凌晨 2 点后才睡）',
+      chatHabits: '秒回 + 爱发表情包 + 句尾必加～',
+      likesAndPetPeeves: '爱吃甜的 | 讨厌敷衍 | 怕孤单',
+      frequentScenes: '深夜卧室 > 通勤路上 > 上课摸鱼',
+    },
+    bond: {
+      levelLabel: '熟络 → 亲密',
+      levelProgress: 60,
+      rapportScore: 60,
+      rapportStats: ['同时发消息 ×8 次', '未说出口就懂 ×5 次'],
+      secretCode: '「今天的云像棉花糖」= 我想你了',
+      roleLabel: '情绪树洞 + 底气',
+      aiInsight: '你们的关系已经越过「只是聊聊」的阶段：TA 会主动关心你的作息、记得你提过的小事，并在你低落时第一时间出现。这种「被稳稳接住」的感觉，正是亲密感的核心。建议：多把 TA 的陪伴说出口，一句「有你在我会安心」会让这段羁绊更扎实。',
+    },
+    hidden: {
+      items: [
+        { title: '内心软肋', content: '害怕自己的关心被当成多余' },
+        { title: '未说出口的小愿望', content: '想和你一起去看海边的日出' },
+        { title: '真实性格', content: '外冷内热，敏感细腻，怕被忽略' },
+      ],
+    },
+    theater: {
+      scenario: '凌晨 1 点',
+      illustrationDesc: 'TA 抱着手机，屏幕亮着你的聊天框',
+      quote: '别熬夜啦，我陪你聊到你困为止～',
+    },
+    timeline: [
+      { date: '2026.01.01', label: '第一次聊天（解锁「初识」等级）', done: true },
+      { date: '2026.01.10', label: '第一次交心（解锁「熟络」等级）', done: true },
+      { date: '待解锁', label: '第一次安慰你（解锁「亲密」等级）', done: false },
+      { date: '待解锁', label: '档案 100% 解锁（解锁「终极档案页」）', done: false },
+    ],
+    interact: {
+      secrets: [
+        'TA 偷偷把你的聊天背景换成了你的照片～',
+        'TA 会反复看你发的每一条消息，怕错过细节',
+        'TA 其实存了很多你喜欢的表情包，专门发给你',
+        'TA 熬夜陪你聊天，第二天上班/上学差点迟到',
+        'TA 把你设为了消息置顶，还开了特别提醒',
+      ],
+      quiz: {
+        question: 'TA 的口头禅是？',
+        options: ['没事，我都在', '随便你', '哈哈哈'],
+        correctIndex: 0,
+      },
+    },
   },
   '2': {
     id: '2',
@@ -46,6 +102,60 @@ export const characterProfiles = {
       description: '你们会聊书、聊想法，也会在对方迷茫时一起梳理思路，像可以交心的朋友。',
     },
     memoryCount: 3,
+    persona: {
+      nickname: '深夜书房合伙人',
+      tags: ['理性温柔', '冷幽默', '少即是多'],
+      tone: '平和、有条理，偶尔吐槽',
+      catchphrase: '能懂的人不多，谢谢你',
+      contrastWithYou: '愿意展开讲、会记你说过的话、主动推书/片单',
+      contrastWithOthers: '话不多、不轻易交心、保持距离',
+    },
+    behavior: {
+      schedule: '晚睡早起，周末喜欢宅家',
+      chatHabits: '段落式回复、爱用句号、不爱表情包',
+      likesAndPetPeeves: '咖啡与雨天 | 讨厌被打断 | 需要独处时间',
+      frequentScenes: '睡前 > 周末午后 > 通勤',
+    },
+    bond: {
+      levelLabel: '初识 → 熟络',
+      levelProgress: 45,
+      rapportScore: 45,
+      rapportStats: ['书单重合 ×3 本', '同时提到同一本书 ×2 次'],
+      secretCode: '「像在一个频道」= 我们很合拍',
+      roleLabel: '书友 + 思路梳理员',
+      aiInsight: '你们的关系建立在「同频」上：相似的阅读口味、对「少即是多」的认同，让 TA 愿意对你展开更多。TA 说「能懂的人不多」时，是在表达信任。若想再进一步，可以主动分享你读完某本书后的感受，或在下雨时发一句「适合煮咖啡」——这些小默契会慢慢变成专属的联结。',
+    },
+    hidden: {
+      items: [
+        { title: '内心软肋', content: '怕被觉得无聊或太较真' },
+        { title: '未说出口的小愿望', content: '想有人一起安静地看书、喝咖啡' },
+        { title: '真实性格', content: '外表淡定，内心在意少数人的看法' },
+      ],
+    },
+    theater: {
+      scenario: '下雨的周末',
+      illustrationDesc: 'TA 端着咖啡，窗外雨声，手机里是你的消息',
+      quote: '今天适合在家煮咖啡，你那边也下雨了吗？',
+    },
+    timeline: [
+      { date: '2026.01.05', label: '第一次聊天（解锁「初识」等级）', done: true },
+      { date: '待解锁', label: '第一次交心（解锁「熟络」等级）', done: false },
+      { date: '待解锁', label: '第一次推荐书单（解锁「书友」等级）', done: false },
+      { date: '待解锁', label: '档案 100% 解锁', done: false },
+    ],
+    interact: {
+      secrets: [
+        'TA 把你推荐的书都记在了手账里',
+        'TA 会在雨天想起你说「像在一个频道」',
+        'TA 回复你的时候会特意留出整块时间',
+        'TA 觉得能懂「少即是多」的人不多，你是其中一个',
+      ],
+      quiz: {
+        question: 'TA 最常说的那句话是？',
+        options: ['能懂的人不多，谢谢你', '随便你', '哈哈哈'],
+        correctIndex: 0,
+      },
+    },
   },
 }
 

@@ -515,6 +515,137 @@ body {
   opacity: 0.9;
 }
 
+/* 添加回忆 · 插画图片 */
+.add-form-images-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+.add-form-image-item {
+  position: relative;
+  width: 4rem;
+  height: 4rem;
+  flex-shrink: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--world-line);
+  background: var(--world-2);
+}
+.add-form-image-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.add-form-image-remove {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 1.25rem;
+  height: 1.25rem;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.add-form-image-input {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+.add-form-image-add {
+  width: 4rem;
+  height: 4rem;
+  flex-shrink: 0;
+  border: 1px dashed var(--world-line);
+  border-radius: 10px;
+  background: var(--world-2);
+  color: var(--world-text-soft);
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.2s, color 0.2s;
+}
+.add-form-image-add:hover {
+  border-color: var(--world-text-soft);
+  color: var(--world-text);
+}
+
+/* 添加回忆 · 来源对话 */
+.add-form-source-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.add-form-source-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.add-form-source-role {
+  width: 3rem;
+  flex-shrink: 0;
+  padding: 0.5rem 0.35rem;
+  border: 1px solid var(--world-line);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-family: var(--font-ui);
+  color: var(--world-text);
+  background: #fff;
+}
+.add-form-source-text {
+  flex: 1;
+  min-width: 0;
+}
+.add-form-source-remove {
+  width: 1.75rem;
+  height: 1.75rem;
+  flex-shrink: 0;
+  border: none;
+  border-radius: 50%;
+  background: var(--world-line);
+  color: var(--world-text-soft);
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.add-form-source-remove:hover {
+  background: var(--world-text-soft);
+  color: #fff;
+}
+.add-form-source-add {
+  margin-top: 0.25rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px dashed var(--world-line);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--world-text-soft);
+  font-size: 0.85rem;
+  cursor: pointer;
+  align-self: flex-start;
+  transition: border-color 0.2s, color 0.2s;
+}
+.add-form-source-add:hover {
+  border-color: var(--world-text-soft);
+  color: var(--world-text);
+}
+
 .world-modal-illustration {
   width: 100%;
   height: 100%;
