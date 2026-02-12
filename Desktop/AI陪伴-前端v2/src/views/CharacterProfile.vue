@@ -13,6 +13,32 @@
         <p class="meta">创建于 {{ profile.createdAt }}</p>
       </div>
 
+      <!-- 真人身份提示 + 退出 -->
+      <section v-if="isRealPerson" class="block real-person-banner sketch-card">
+        <p class="real-person-label">你正在以真人身份查看此档案</p>
+        <p class="real-person-desc">可补充/纠正 AI 提取的信息，你的备注会以彩色显示。</p>
+        <button type="button" class="sketch-btn real-person-exit" @click="exitRealPerson">退出真人账号</button>
+      </section>
+
+      <!-- 创建者：分享克隆令牌 -->
+      <section v-if="!isRealPerson && profile" class="block sketch-card clone-token-block">
+        <h2 class="block-title sketch-title">分享给真人（克隆令牌）</h2>
+        <p class="profile-row hint">生成令牌后分享给被克隆的真人，对方可凭令牌登录查看对话与档案，并以彩色气泡/备注互动。</p>
+        <template v-if="cloneTokenData?.token">
+          <div class="token-box sketch-border">
+            <span class="token-value">{{ cloneTokenData.token }}</span>
+          </div>
+          <div class="token-actions">
+            <button type="button" class="sketch-btn" @click="copyToken">复制令牌</button>
+            <button type="button" class="sketch-btn" @click="revokeTokenConfirm">撤销令牌</button>
+          </div>
+          <p class="token-meta">有效期 7 天 · 分享方式：复制令牌或截图</p>
+        </template>
+        <template v-else>
+          <button type="button" class="sketch-btn primary full" @click="generateToken">生成克隆令牌</button>
+        </template>
+      </section>
+
       <!-- 1. 表层人设卡 -->
       <section v-if="profile.persona" class="block sketch-card">
         <h2 class="block-title sketch-title">表层人设卡</h2>
@@ -30,6 +56,13 @@
             <strong>别人眼里：</strong><br>{{ profile.persona.contrastWithOthers }}
           </div>
         </div>
+        <template v-if="isRealPerson">
+          <div v-if="getProfileNote(id, 'persona')" class="real-note-block">{{ getProfileNote(id, 'persona') }}</div>
+          <div class="real-note-edit">
+            <textarea v-model="noteDraft.persona" class="sketch-input real-note-input" placeholder="补充或纠正上述 AI 提取的信息（真人备注）" rows="2" />
+            <button type="button" class="sketch-btn" @click="saveNote('persona')">保存备注</button>
+          </div>
+        </template>
       </section>
 
       <!-- 2. 生活行为侧写 -->
@@ -45,6 +78,13 @@
           <dt>高频聊天场景</dt>
           <dd>{{ profile.behavior.frequentScenes }}</dd>
         </dl>
+        <template v-if="isRealPerson">
+          <div v-if="getProfileNote(id, 'behavior')" class="real-note-block">{{ getProfileNote(id, 'behavior') }}</div>
+          <div class="real-note-edit">
+            <textarea v-model="noteDraft.behavior" class="sketch-input real-note-input" placeholder="补充或纠正上述 AI 提取的信息（真人备注）" rows="2" />
+            <button type="button" class="sketch-btn" @click="saveNote('behavior')">保存备注</button>
+          </div>
+        </template>
       </section>
 
       <!-- 3. 关系羁绊簿 -->
@@ -65,6 +105,13 @@
           <strong class="bond-ai-insight-title">AI 洞察</strong>
           <p class="bond-ai-insight-text">{{ profile.bond.aiInsight }}</p>
         </div>
+        <template v-if="isRealPerson">
+          <div v-if="getProfileNote(id, 'bond')" class="real-note-block">{{ getProfileNote(id, 'bond') }}</div>
+          <div class="real-note-edit">
+            <textarea v-model="noteDraft.bond" class="sketch-input real-note-input" placeholder="补充或纠正上述 AI 提取的信息（真人备注）" rows="2" />
+            <button type="button" class="sketch-btn" @click="saveNote('bond')">保存备注</button>
+          </div>
+        </template>
       </section>
 
       <!-- 4. 深层隐藏档案 -->
@@ -95,6 +142,13 @@
           <p class="theater-desc">{{ profile.theater.illustrationDesc }}</p>
           <p class="theater-quote">「{{ profile.theater.quote }}」</p>
         </div>
+        <template v-if="isRealPerson">
+          <div v-if="getProfileNote(id, 'theater')" class="real-note-block">{{ getProfileNote(id, 'theater') }}</div>
+          <div class="real-note-edit">
+            <textarea v-model="noteDraft.theater" class="sketch-input real-note-input" placeholder="补充或纠正上述 AI 提取的信息（真人备注）" rows="2" />
+            <button type="button" class="sketch-btn" @click="saveNote('theater')">保存备注</button>
+          </div>
+        </template>
       </section>
 
       <!-- 6. 成长时间轴 -->
@@ -243,12 +297,52 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { characterProfiles } from '../data/mock'
+import { useCloneToken } from '../composables/useCloneToken'
 import Doodles from '../components/Doodles.vue'
 
 const route = useRoute()
 const router = useRouter()
 const id = computed(() => route.params.id)
 const profile = ref(null)
+
+const {
+  realPersonCharacterId,
+  getToken,
+  generateToken: doGenerateToken,
+  revokeToken: doRevokeToken,
+  clearRealPerson,
+  getProfileNote,
+  setProfileNote,
+} = useCloneToken()
+
+const isRealPerson = computed(() => realPersonCharacterId.value === id.value)
+const cloneTokenData = computed(() => getToken(id.value))
+const noteDraft = ref({ persona: '', behavior: '', bond: '', theater: '' })
+
+function generateToken() {
+  doGenerateToken(id.value)
+}
+function copyToken() {
+  const t = cloneTokenData.value?.token
+  if (!t) return
+  if (navigator.clipboard?.writeText) {
+    navigator.clipboard.writeText(t).then(() => alert('已复制到剪贴板'))
+  } else {
+    alert('令牌：' + t)
+  }
+}
+function revokeTokenConfirm() {
+  if (!confirm('撤销后真人用户将无法再凭此令牌登录，确定撤销？')) return
+  doRevokeToken(id.value)
+}
+function exitRealPerson() {
+  clearRealPerson()
+}
+function saveNote(sectionKey) {
+  const text = noteDraft.value[sectionKey]
+  setProfileNote(id.value, sectionKey, text || '')
+  noteDraft.value = { ...noteDraft.value, [sectionKey]: '' }
+}
 
 const hiddenUnlocked = ref(false)
 const showFlipModal = ref(false)
@@ -787,5 +881,68 @@ function onShare() {
 }
 .quiz-wrong {
   color: var(--sketch-gray);
+}
+
+/* 真人身份横幅 */
+.real-person-banner {
+  background: linear-gradient(135deg, #fef9e7 0%, #fdebd0 100%);
+  border-color: #e8c87a;
+}
+.real-person-label {
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+}
+.real-person-desc {
+  font-size: 0.9rem;
+  color: var(--sketch-gray);
+  margin-bottom: 1rem;
+}
+.real-person-exit {
+  margin-top: 0.5rem;
+}
+
+/* 克隆令牌 */
+.clone-token-block .hint {
+  font-size: 0.9rem;
+  color: var(--sketch-gray);
+  margin-bottom: 1rem;
+}
+.token-box {
+  padding: 1rem;
+  text-align: center;
+  font-family: monospace;
+  font-size: 1.25rem;
+  letter-spacing: 0.2em;
+  margin-bottom: 0.75rem;
+  background: var(--sketch-paper);
+}
+.token-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.token-meta {
+  font-size: 0.85rem;
+  color: var(--sketch-gray);
+}
+
+/* 真人备注（彩色，与 AI 内容区分） */
+.real-note-block {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  border-left: 4px solid #e8a87c;
+  background: #fef9e7;
+  color: #b85c38;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  border-radius: 0 8px 8px 0;
+}
+.real-note-edit {
+  margin-top: 0.75rem;
+}
+.real-note-input {
+  width: 100%;
+  margin-bottom: 0.5rem;
+  min-height: 4em;
 }
 </style>

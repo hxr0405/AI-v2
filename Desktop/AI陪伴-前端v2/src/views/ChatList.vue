@@ -37,6 +37,12 @@
         </button>
       </div>
 
+      <router-link to="/clone-login" class="clone-login-entry sketch-card">
+        <span class="clone-login-icon">🎫</span>
+        <span class="clone-login-text">使用克隆令牌登录</span>
+        <span class="clone-login-arrow">→</span>
+      </router-link>
+
       <div v-if="!characterList.length" class="empty">
         <div class="empty-doodles">
           <Doodles type="star" size="s" />
@@ -126,6 +132,29 @@ function goProfile(id) {
 }
 .list-wrap {
   padding: 1rem;
+}
+.clone-login-entry {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+  text-decoration: none;
+  color: var(--sketch-black);
+  transition: transform 0.15s ease;
+}
+.clone-login-entry:hover {
+  transform: translateY(-2px);
+}
+.clone-login-icon {
+  font-size: 1.5rem;
+}
+.clone-login-text {
+  flex: 1;
+  font-size: 0.95rem;
+}
+.clone-login-arrow {
+  color: var(--sketch-gray);
 }
 .chat-item {
   display: flex;
